@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Generate Image</title>
+    </head>
+    <body>
+        <h1>Generate Image</h1>
+        <form id="textForm">
+            <label for="textInput">Enter Text:</label><br />
+            <textarea id="textInput" name="text" rows="4" cols="50"></textarea
+            ><br />
+            <button type="submit">Generate Image</button>
+        </form>
+
+        <div id="imageContainer" style="top:'5px"></div>
+
+        <script>
+            document
+                .getElementById("textForm")
+                .addEventListener("submit", async function (event) {
+                    event.preventDefault();
+
+                    const text = document.getElementById("textInput").value;
+                    const response = await fetch("/create", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ text }),
+                    });
+
+                    const data = await response.json();
+
+                    const image = data[0].url;
+                    const imageContainer =
+                        document.getElementById("imageContainer");
+                    imageContainer.innerHTML = `<img src="${image}" alt="Generated Image">`;
+                });
+        </script>
+    </body>
+</html>
